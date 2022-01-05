@@ -17,10 +17,10 @@
             <guid>https://zyeinn.github.io/posts/2022/01/the-day-i-found-a-vulnerability-in-my-universitys-moodle/</guid>
             <description>In the summer of 2021, 2 friends and I were making the &amp;ldquo;schooled&amp;rdquo; Hackthebox machine, which uses the 3.9 version of moodle.
 This version allowed RCE from a malicious plugin, you only needed to be an administrator for that. Looking further, we found an article from moodle talking about the existence of a Stored XSS by the parameter &amp;ldquo;moodle net profile&amp;rdquo; in the profile in version 3.9.1.
-As that parameter was not sanitized, it allowed a malicious user to inject javascript code, making a simple paylaod to steal the cookie (MoodleSession) of the visitor who accessed his profile.</description>
+As that parameter was not sanitized, it allowed a malicious user to inject javascript code, making a simple payload to steal the cookie (MoodleSession) of the visitor who accessed his profile.</description>
             <content type="html"><![CDATA[<p>In the summer of 2021, 2 friends and I were making the &ldquo;schooled&rdquo; Hackthebox machine, which uses the 3.9 version of moodle.</p>
 <p>This version allowed RCE from a malicious plugin, you only needed to be an administrator for that. Looking further, we found an article from moodle talking about the existence of a Stored XSS by the parameter &ldquo;moodle net profile&rdquo; in the profile in version 3.9.1.</p>
-<p>As that parameter was not sanitized, it allowed a malicious user to inject javascript code, making a simple paylaod to steal the cookie (MoodleSession) of the visitor who accessed his profile. With the stolen cookie, the malicious user can change his cookie to the victim, having full access to the account.</p>
+<p>As that parameter was not sanitized, it allowed a malicious user to inject javascript code, making a simple payload to steal the cookie (MoodleSession) of the visitor who accessed his profile. With the stolen cookie, the malicious user can change his cookie to the victim, having full access to the account.</p>
 <p>After rooting the machine, I went to see the version of Moodle from my university and I came across 3.9.1, the same one that allowed Stored XSS.</p>
 <p>So I went to test if it was possible and it was.</p>
 <p>I sent an email straight away to the responsible of the infrastructure and within a few weeks they had already solved the problem.</p>
