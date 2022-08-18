@@ -14,7 +14,7 @@
       <pubDate>Tue, 04 Jan 2022 00:00:00 +0000</pubDate>
       
       <guid>https://zyeinn.github.io/posts/2022/01/the-day-i-found-a-vulnerability-in-my-universitys-moodle/</guid>
-      <description>In the summer of 2021, 2 friends and I were making the &amp;ldquo;schooled&amp;rdquo; Hackthebox machine, which uses the 3.9 version of moodle.
+      <description>In the summer of 2021, 2 friends and I were resolving the &amp;ldquo;schooled&amp;rdquo; Hackthebox machine, which uses the 3.9 version of moodle.
 This version allowed RCE from a malicious plugin, you only needed to be an administrator for that. Looking further, we found an article from moodle talking about the existence of a Stored XSS by the parameter &amp;ldquo;moodle net profile&amp;rdquo; in the profile in version 3.9.1.
 As that parameter was not sanitized, it allowed a malicious user to inject javascript code, making a simple payload to steal the cookie (MoodleSession) of the visitor who accessed his profile.</description>
     </item>
